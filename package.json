@@ -1,0 +1,30 @@
+{
+  "name": "restaurant-finder-api",
+  "version": "1.0.0",
+  "description": "LLM-Driven Restaurant Finder API that allows users to enter a free‑form message describing what they want to do",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "engines": {
+    "node": "24.11.1"
+  },
+  "engineStrict": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/louieseno/restaurant-finder-api.git"
+  },
+  "keywords": [
+    "llm",
+    "foursquare"
+  ],
+  "author": "louiejohnseno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/louieseno/restaurant-finder-api/issues"
+  },
+  "homepage": "https://github.com/louieseno/restaurant-finder-api#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
