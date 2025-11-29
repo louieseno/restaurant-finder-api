@@ -1,18 +1,21 @@
 import express, { Router } from "express";
+import { RestaurantController } from "./restaurant.controller";
 
-class RestaurantRoute {
+export class RestaurantRoute {
   private static instance: RestaurantRoute;
+  private restaurantController: RestaurantController;
   private router: Router;
 
   private constructor() {
     this.router = express.Router();
+    this.restaurantController = RestaurantController.getInstance();
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get("/restaurants", (_, res) => {
-      res.json({ message: "Restaurants endpoint", data: [] });
-    });
+    this.router.get("/execute", (req, res) =>
+      this.restaurantController.execute(req, res)
+    );
   }
 
   private getRouter(): Router {
@@ -26,5 +29,3 @@ class RestaurantRoute {
     return RestaurantRoute.instance.getRouter();
   }
 }
-
-export const RESTAURANT_ROUTE = RestaurantRoute.getInstanceRouter();

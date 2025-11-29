@@ -9,7 +9,8 @@
     // Path aliases
     "paths": {
       "@config/*": ["./src/config/*"],
-      "@modules/*": ["./src/modules/*"]
+      "@modules/*": ["./src/modules/*"],
+      "@providers/*": ["./src/providers/*"]
     },
 
     // Module system
@@ -37,8 +38,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-
-  // Include/Exclude
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }
