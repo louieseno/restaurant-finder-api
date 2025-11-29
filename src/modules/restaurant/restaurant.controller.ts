@@ -21,15 +21,7 @@ export class RestaurantController {
    */
   async execute(req: Request, res: Response): Promise<void> {
     try {
-      const { code, message } = req.query;
-
-      if (!code || code !== config.ENDPOINT_SECRET_CODE) {
-        res.status(401).json({
-          error: "Unauthorized",
-          message: "Invalid or missing access code",
-        });
-        return;
-      }
+      const { message } = req.query;
 
       if (!message || typeof message !== "string") {
         res.status(400).json({

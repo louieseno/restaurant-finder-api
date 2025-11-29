@@ -1,11 +1,13 @@
 import express from "express";
 import config from "@config/config";
 import { apiV1 } from "@modules/_config/routes/v1";
+import { loggerMiddleware } from "@modules/_config/middlewares/logger";
 
 // Create the main app
 const app = express();
 
 app.use(express.json());
+app.use(loggerMiddleware);
 
 // Mount versioned API
 app.use("/api/v1", apiV1);

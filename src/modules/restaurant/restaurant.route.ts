@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import { RestaurantController } from "./restaurant.controller";
+import { secretCodeMiddleware } from "@modules/_config/middlewares/authenticate";
 
 export class RestaurantRoute {
   private static instance: RestaurantRoute;
@@ -13,8 +14,10 @@ export class RestaurantRoute {
   }
 
   private initializeRoutes() {
-    this.router.get("/execute", (req, res) =>
-      this.restaurantController.execute(req, res)
+    this.router.get(
+      "/execute",
+      secretCodeMiddleware,
+      this.restaurantController.execute.bind(this.restaurantController)
     );
   }
 
