@@ -1,11 +1,14 @@
+import { FourSquareApiProvider } from "@providers/four_square/fourSquareApi.provider";
 import { OpenApiProvider } from "@providers/llm/open_api/openApi.provider";
 
 export class RestaurantService {
   private static instance: RestaurantService;
   private openApiProvider: OpenApiProvider;
+  private fourSquareApiProvider: FourSquareApiProvider;
 
   private constructor() {
     this.openApiProvider = OpenApiProvider.getInstance();
+    this.fourSquareApiProvider = FourSquareApiProvider.getInstance();
   }
 
   public static getInstance(): RestaurantService {
@@ -17,10 +20,11 @@ export class RestaurantService {
 
   async execute(message: string) {
     const command = await this.openApiProvider.convertMessageToJSON(message);
-
+    const response = await this.fourSquareApiProvider.searchRestaurants(
+      command.parameters
+    );
     return {
-      query: message,
-      command: command,
+      response,
     };
   }
 }
