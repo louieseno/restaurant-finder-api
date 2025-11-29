@@ -29,9 +29,10 @@ export class OpenApiProvider {
         "parameters": {
           "query": "cuisine type or restaurant name",
           "near": "location",
-          "price": "1-4 (1=cheap, 2=moderate, 3=expensive, 4=very expensive) // optional",
+          "min_price": "1-4 (1=cheap, 2=moderate, 3=expensive, 4=very expensive) // optional",
+          "max_price": "1-4 (1=cheap, 2=moderate, 3=expensive, 4=very expensive) // optional",
           "open_now": true/false // optional,
-          "rating": minimum rating number // optional
+          "sort": "sorting criteria (RELEVANCE, RATING, DISTANCE, POPULARITY)" // optional
         }
       }
 
@@ -40,8 +41,18 @@ export class OpenApiProvider {
       - Do not add any text outside the JSON.
       - Do NOT include trailing commas.
       - Do NOT include any explanation, comments, or text outside the JSON.
-      - price should be a string number from 1-4.
-      - rating should be a number.
+      - Map qualitative prices to numbers for min_price and max_price as follows:
+        - cheap -> 1
+        - moderate -> 2
+        - expensive -> 3
+        - very expensive -> 4
+      - If a single price is mentioned, set min_price and max_price equal to that number.
+      - If a range is mentioned, set min_price and max_price accordingly.
+      - If the user mentions preference like "rating", "popular", or "closest", map it to the corresponding sort value:
+        - "rating" → "RATING"
+        - "closest", "nearest" → "DISTANCE"
+        - "popular", "trending" → "POPULARITY"
+        - default → "RELEVANCE"
       - open_now should be boolean.
       - If a field was not mentioned, omit it entirely.
       `;
