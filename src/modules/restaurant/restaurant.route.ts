@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 import { RestaurantController } from "./restaurant.controller";
 import { secretCodeMiddleware } from "@modules/_config/middlewares/authenticate";
+import { executeLimiter } from "@modules/_config/middlewares/rateLimit";
 
 export class RestaurantRoute {
   private static instance: RestaurantRoute;
@@ -16,6 +17,7 @@ export class RestaurantRoute {
   private initializeRoutes() {
     this.router.get(
       "/execute",
+      executeLimiter,
       secretCodeMiddleware,
       this.restaurantController.execute.bind(this.restaurantController)
     );
