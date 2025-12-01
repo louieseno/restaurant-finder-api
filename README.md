@@ -215,6 +215,42 @@ Send natural language queries to find restaurants using the execute endpoint wit
 curl "http://localhost:3000/api/v1/execute?message=Find%20me%20a%20cheap%20sushi%20restaurant%20in%20downtown%20Los%20Angeles%20that's%20open%20now%20and%20has%20at%20least%20a%204-star%20rating&code=pioneerdevai"
 ```
 
+### Sample Response
+
+The API returns restaurant data with the following structure:
+
+```json
+{
+  "fsq_place_id": "562796d5498e03dd35da0f5e",
+  "name": "Whole Foods Market",
+  "address": "788 S Grand Ave (at W 8th St), Los Angeles, CA 90017",
+  "cuisine": "Grocery Store, Health Food Store, Organic Grocery"
+}
+```
+
+### API Limitations
+
+The following fields are **not included** in the response due to Foursquare API limitations and are only accessible with a premium account:
+
+- **Rating (optional)**
+- **Price Level (optional)**
+- **Operating Hours (optional)**
+
+### Rate Limiting
+
+To protect against excessive API usage and control billing costs, the API implements strict rate limiting:
+
+- **Limit**: 3 requests per 5 minutes per IP address
+- **Purpose**: Prevents API abuse and controls third-party service costs (OpenAI + Foursquare)
+- **Response**: Returns `429 Too Many Requests` when limit is exceeded
+- **Reset**: Rate limit window resets every 5 minutes
+
+**Recommended Usage Pattern:**
+
+- Cache results locally when possible
+- Batch multiple location queries into a single request
+- Consider the rate limit when integrating with frontend applications
+
 ## Testing
 
 Run the comprehensive test suite:
