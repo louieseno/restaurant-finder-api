@@ -2,7 +2,7 @@ import config from "@config/config";
 import OpenAI from "openai";
 import { OpenApiJsonResponseDTO } from "./openApi.dto";
 import { OpenApiJsonSchema } from "./openApi.schema";
-
+import { z } from "zod";
 export class OpenApiProvider {
   private static instance: OpenApiProvider;
   private openai: OpenAI;
@@ -50,11 +50,14 @@ export class OpenApiProvider {
       - If a range is mentioned, set min_price and max_price accordingly.
       - If the user mentions preference like "rating", "popular", or "closest", map it to the corresponding sort value:
         - "rating" → "RATING"
-        - "closest", "nearest" → "DISTANCE"
-        - "popular", "trending" → "POPULARITY"
-        - default → "RELEVANCE"
-      - open_now should be boolean.
-      - If a field was not mentioned, omit it entirely.
+        - "closest", "nearest", "farthest" → "DISTANCE"
+        - "popular", "trending", "most popular" → "POPULARITY"
+        - if none is mentioned,  default to "RELEVANCE"
+      - For open_now, determine based on keywords:
+        - Set open_now to true ONLY when user mentions explicitly or similar to the following: "open now", "currently open", "open right now", "available now", "serving now", "operating now"
+        - Set open_now to false when user mentions: "closed", "opening later", "will be open", "opens at", "closed now"
+        - If no time-related keywords are mentioned, omit open_now entirely
+      - If a field was not mentioned, omit it entirely except if default value of sorting is "RELEVANCE".
       `;
 
     try {
@@ -80,6 +83,9 @@ export class OpenApiProvider {
     } catch (error) {
       if (error instanceof SyntaxError) {
         throw new Error("Failed to parse LLM response as JSON");
+      }
+      if (error instanceof z.ZodError) {
+        throw new Error(`LLM response validation error: ${error.message}`);
       }
       throw error;
     }
