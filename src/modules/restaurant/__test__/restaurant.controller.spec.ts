@@ -6,6 +6,15 @@ import { logger } from "@config/logger";
 // Mock the RestaurantService
 jest.mock("../restaurant.service");
 
+// Mock config to avoid environment variable requirements
+jest.mock("@config/config", () => ({
+  OPEN_API_KEY: "test-openai-key",
+  FSQ_API_KEY: "test-fsq-key",
+  FSQ_PLACES_BASE_URL: "https://test-fsq-api.com",
+  ENDPOINT_SECRET_CODE: "test-secret-code",
+  PORT: 3000,
+}));
+
 // Mock the winston logger
 jest.mock("@config/logger", () => ({
   logger: {

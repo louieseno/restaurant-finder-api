@@ -8,6 +8,15 @@ import { FSQRestaurantDTO } from "@providers/four_square/fourSquareApi.dto";
 jest.mock("@providers/llm/open_api/openApi.provider");
 jest.mock("@providers/four_square/fourSquareApi.provider");
 
+// Mock config to avoid environment variable requirements
+jest.mock("@config/config", () => ({
+  OPEN_API_KEY: "test-openai-key",
+  FSQ_API_KEY: "test-fsq-key",
+  FSQ_PLACES_BASE_URL: "https://test-fsq-api.com",
+  ENDPOINT_SECRET_CODE: "test-secret-code",
+  PORT: 3000,
+}));
+
 const mockedOpenApiProvider = OpenApiProvider as jest.Mocked<
   typeof OpenApiProvider
 >;
