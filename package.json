@@ -1,0 +1,56 @@
+{
+  "name": "restaurant-finder-api",
+  "version": "1.0.0",
+  "description": "LLM-Driven Restaurant Finder API that allows users to enter a free‑form message describing what they want to do",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "start:prod": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc && npx tsc-alias -p tsconfig.json --resolve-full-paths",
+    "test": "jest"
+  },
+  "engines": {
+    "node": "24.11.1",
+    "npm": "11.6.2"
+  },
+  "engineStrict": true,
+  "packageManager": "npm@11.6.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/louieseno/restaurant-finder-api.git"
+  },
+  "keywords": [
+    "llm",
+    "foursquare"
+  ],
+  "author": "louiejohnseno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/louieseno/restaurant-finder-api/issues"
+  },
+  "homepage": "https://github.com/louieseno/restaurant-finder-api#readme",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "openai": "^6.9.1",
+    "winston": "^3.18.3",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "dotenv": "^17.2.3",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
