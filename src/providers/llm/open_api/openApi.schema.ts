@@ -3,7 +3,7 @@ import { z } from "zod";
 export const OpenApiJsonSchema = z.object({
   action: z.literal("restaurant_search"),
   parameters: z.object({
-    query: z.string({ error: "Quer value value is required." }),
+    query: z.string({ error: "Query value value is required." }),
     near: z.string({ error: "Near value is required." }),
     min_price: z
       .union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)])

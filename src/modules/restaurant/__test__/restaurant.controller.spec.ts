@@ -1,9 +1,17 @@
 import { Request, Response } from "express";
 import { RestaurantController } from "../restaurant.controller";
 import { RestaurantService } from "../restaurant.service";
+import { logger } from "@config/logger";
 
 // Mock the RestaurantService
 jest.mock("../restaurant.service");
+
+// Mock the winston logger
+jest.mock("@config/logger", () => ({
+  logger: {
+    error: jest.fn(),
+  },
+}));
 
 const mockedRestaurantService = RestaurantService as jest.Mocked<
   typeof RestaurantService
@@ -146,9 +154,6 @@ describe("RestaurantController", () => {
       mockRequest.query = { message: "find restaurants" };
       mockRestaurantServiceInstance.execute.mockRejectedValue(serviceError);
 
-      // Mock console.error to avoid noise in test output
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
-
       await controller.execute(
         mockRequest as Request,
         mockResponse as Response
@@ -157,7 +162,7 @@ describe("RestaurantController", () => {
       expect(mockRestaurantServiceInstance.execute).toHaveBeenCalledWith(
         "find restaurants"
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(logger.error).toHaveBeenCalledWith(
         "Error executing restaurant search:",
         serviceError
       );
@@ -166,17 +171,12 @@ describe("RestaurantController", () => {
         error: "Internal Server Error",
         message: errorMessage,
       });
-
-      consoleSpy.mockRestore();
     });
 
     it("should handle service errors with non-Error instance", async () => {
       const serviceError = "String error";
       mockRequest.query = { message: "find restaurants" };
       mockRestaurantServiceInstance.execute.mockRejectedValue(serviceError);
-
-      // Mock console.error to avoid noise in test output
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
 
       await controller.execute(
         mockRequest as Request,
@@ -186,7 +186,7 @@ describe("RestaurantController", () => {
       expect(mockRestaurantServiceInstance.execute).toHaveBeenCalledWith(
         "find restaurants"
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(logger.error).toHaveBeenCalledWith(
         "Error executing restaurant search:",
         serviceError
       );
@@ -195,8 +195,6 @@ describe("RestaurantController", () => {
         error: "Internal Server Error",
         message: "An unexpected error occurred",
       });
-
-      consoleSpy.mockRestore();
     });
   });
 });

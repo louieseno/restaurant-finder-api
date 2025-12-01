@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import config from "@config/config";
 import { RestaurantService } from "./restaurant.service";
+import { logger } from "@config/logger";
 
 export class RestaurantController {
   private static instance: RestaurantController;
@@ -38,7 +38,7 @@ export class RestaurantController {
         data: result,
       });
     } catch (error) {
-      console.error("Error executing restaurant search:", error);
+      logger.error("Error executing restaurant search:", error);
 
       res.status(500).json({
         error: "Internal Server Error",

@@ -6,6 +6,7 @@ import {
   FSQPlaceAPIResponseDTO,
   FSQRestaurantDTO,
 } from "./fourSquareApi.dto";
+import { logger } from "@config/logger";
 
 export class FourSquareApiProvider {
   private static instance: FourSquareApiProvider;
@@ -49,6 +50,7 @@ export class FourSquareApiProvider {
           : "N/A",
       }));
     } catch (error) {
+      logger.error("Error in FourSquareApiProvider.searchRestaurants:", error);
       if (axios.isAxiosError(error)) {
         throw new Error(
           `Foursquare API error: ${

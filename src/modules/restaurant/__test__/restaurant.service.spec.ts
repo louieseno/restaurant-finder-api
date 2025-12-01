@@ -3,7 +3,6 @@ import { OpenApiProvider } from "@providers/llm/open_api/openApi.provider";
 import { FourSquareApiProvider } from "@providers/four_square/fourSquareApi.provider";
 import { OpenApiJsonResponseDTO } from "@providers/llm/open_api/openApi.dto";
 import { FSQRestaurantDTO } from "@providers/four_square/fourSquareApi.dto";
-import { mock } from "node:test";
 
 // Mock the provider classes
 jest.mock("@providers/llm/open_api/openApi.provider");

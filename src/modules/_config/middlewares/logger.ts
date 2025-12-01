@@ -1,3 +1,4 @@
+import { logger } from "@config/logger";
 import { Request, Response, NextFunction } from "express";
 
 export const loggerMiddleware = (
@@ -5,6 +6,6 @@ export const loggerMiddleware = (
   _: Response,
   next: NextFunction
 ) => {
-  console.log(`${req.method} ${req.url}`);
+  logger.info(`${req.method} ${req.url}`);
   next();
 };

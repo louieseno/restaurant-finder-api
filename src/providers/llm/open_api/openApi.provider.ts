@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { OpenApiJsonResponseDTO } from "./openApi.dto";
 import { OpenApiJsonSchema } from "./openApi.schema";
 import { z } from "zod";
+import { logger } from "@config/logger";
 export class OpenApiProvider {
   private static instance: OpenApiProvider;
   private openai: OpenAI;
@@ -81,6 +82,7 @@ export class OpenApiProvider {
 
       return validatedResponse;
     } catch (error) {
+      logger.error("Error in OpenApiProvider.convertMessageToJSON:", error);
       if (error instanceof SyntaxError) {
         throw new Error("Failed to parse LLM response as JSON");
       }

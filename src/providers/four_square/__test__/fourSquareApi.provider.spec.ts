@@ -2,6 +2,7 @@ import { FourSquareApiProvider } from "../fourSquareApi.provider";
 import { OpenApiJsonParametersDTO } from "@providers/llm/open_api/openApi.dto";
 import axios from "axios";
 import config from "@config/config";
+import { logger } from "@config/logger";
 
 // Mock axios
 jest.mock("axios");
@@ -11,6 +12,13 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock("@config/config", () => ({
   FSQ_PLACES_BASE_URL: "test-base-url",
   FSQ_API_KEY: "test-api-key",
+}));
+
+// Mock the winston logger
+jest.mock("@config/logger", () => ({
+  logger: {
+    error: jest.fn(),
+  },
 }));
 
 describe("FourSquareApiProvider", () => {
@@ -230,6 +238,11 @@ describe("FourSquareApiProvider", () => {
       await expect(
         provider.searchRestaurants(mockSearchParams)
       ).rejects.toThrow("Foursquare API error: Invalid API key");
+
+      expect(logger.error).toHaveBeenCalledWith(
+        "Error in FourSquareApiProvider.searchRestaurants:",
+        axiosError
+      );
     });
 
     it("should handle axios errors without response data", async () => {
@@ -244,6 +257,11 @@ describe("FourSquareApiProvider", () => {
       await expect(
         provider.searchRestaurants(mockSearchParams)
       ).rejects.toThrow("Foursquare API error: Network Error");
+
+      expect(logger.error).toHaveBeenCalledWith(
+        "Error in FourSquareApiProvider.searchRestaurants:",
+        axiosError
+      );
     });
 
     it("should handle non-axios errors", async () => {
@@ -255,6 +273,11 @@ describe("FourSquareApiProvider", () => {
       await expect(
         provider.searchRestaurants(mockSearchParams)
       ).rejects.toThrow("Something went wrong");
+
+      expect(logger.error).toHaveBeenCalledWith(
+        "Error in FourSquareApiProvider.searchRestaurants:",
+        genericError
+      );
     });
 
     it("should call API with minimal parameters", async () => {

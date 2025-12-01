@@ -1,3 +1,4 @@
+import { logger } from "@config/logger";
 import { OpenApiProvider } from "../openApi.provider";
 import OpenAI from "openai";
 
@@ -7,6 +8,13 @@ jest.mock("openai");
 // Mock config
 jest.mock("@config/config", () => ({
   OPEN_API_KEY: "test-openai-api-key",
+}));
+
+// Mock the winston logger
+jest.mock("@config/logger", () => ({
+  logger: {
+    error: jest.fn(),
+  },
 }));
 
 const mockOpenAI = OpenAI as jest.MockedClass<typeof OpenAI>;
@@ -121,6 +129,11 @@ describe("OpenApiProvider", () => {
           "LLM response validation error"
         );
 
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(Object)
+        );
+
         expect(mockChatCompletions).toHaveBeenCalledWith({
           model: "gpt-4o-mini",
           messages: [
@@ -159,6 +172,11 @@ describe("OpenApiProvider", () => {
           "LLM response validation error"
         );
 
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(Object)
+        );
+
         expect(mockChatCompletions).toHaveBeenCalledWith({
           model: "gpt-4o-mini",
           messages: [
@@ -194,6 +212,11 @@ describe("OpenApiProvider", () => {
 
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "LLM response validation error"
+        );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(Object)
         );
 
         expect(mockChatCompletions).toHaveBeenCalledWith({
@@ -611,6 +634,11 @@ describe("OpenApiProvider", () => {
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "Failed to parse LLM response as JSON"
         );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(SyntaxError)
+        );
       });
 
       it("should throw 'Failed to parse LLM response as JSON' when response has malformed JSON", async () => {
@@ -629,6 +657,11 @@ describe("OpenApiProvider", () => {
 
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "Failed to parse LLM response as JSON"
+        );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(SyntaxError)
         );
       });
 
@@ -655,6 +688,11 @@ describe("OpenApiProvider", () => {
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "LLM response validation error:"
         );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(Object)
+        );
       });
 
       it("should throw 'LLM response validation error' when required field is missing", async () => {
@@ -679,6 +717,11 @@ describe("OpenApiProvider", () => {
 
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "LLM response validation error:"
+        );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(Object)
         );
       });
 
@@ -707,6 +750,11 @@ describe("OpenApiProvider", () => {
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "LLM response validation error:"
         );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(Object)
+        );
       });
 
       it("should throw 'LLM response validation error' when sort value is invalid", async () => {
@@ -733,6 +781,11 @@ describe("OpenApiProvider", () => {
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "LLM response validation error:"
         );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          expect.any(Object)
+        );
       });
 
       it("should propagate OpenAI API errors", async () => {
@@ -744,6 +797,11 @@ describe("OpenApiProvider", () => {
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "OpenAI API rate limit exceeded"
         );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          apiError
+        );
       });
 
       it("should propagate network errors", async () => {
@@ -754,6 +812,11 @@ describe("OpenApiProvider", () => {
 
         await expect(provider.convertMessageToJSON(message)).rejects.toThrow(
           "Network request failed"
+        );
+
+        expect(logger.error).toHaveBeenCalledWith(
+          "Error in OpenApiProvider.convertMessageToJSON:",
+          networkError
         );
       });
     });
